@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart - HoodieShop</title>
+    <link rel="stylesheet" href="css">
+    <style>
+        /* CSS to center the cart items */
+        .cart {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Style for the cart items */
+        .cart-item {
+            display: inline-block;
+            margin: 20px;
+            text-align: center;
+        }
+
+        .cart-item img {
+            width: 100px; /* Default size of the image */
+            height: auto;
+        }
+
+        /* Adjust image size based on the number of items in the cart */
+        .cart-item img.small {
+            width: 80px;
+        }
+
+        .cart-item img.large {
+            width: 120px;
+        }
+
+        /* Cart summary section */
+        #cart-summary {
+            margin-top: 20px;
+        }
+
+        /* Button style */
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo"><a href="/">HoodieShop</a></div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="shoppage.html">Shop</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+                <li><a href="contactus.html">Contact</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="login.html">login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Cart Items -->
+    <section class="cart">
+        <h1>Your Cart</h1>
+        <div id="cart-items">
+            <!-- Cart items will be dynamically added here -->
+        </div>
+        <div id="cart-summary">
+            <!-- Cart summary will be displayed here -->
+        </div>
+        <button onclick="checkout()"><a href="check.html">Proceed to Checkout</a></button>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 HoodieShop. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to check if the user is logged in
+        function isLoggedIn() {
+            // You can check for a login session or token here (using localStorage, cookies, or a session variable)
+            // For this example, we'll check if there's a user object in localStorage
+            return localStorage.getItem('user') !== null;
+        }
+
+        function loadCart() {
+            var cart = JSON.parse(localStorage.getItem('cart')) || [];
+            var cartItemsContainer = document.getElementById('cart-items');
+            var cartSummaryContainer = document.getElementById('cart-summary');
+
+            // Clear previous cart content
+            cartItemsContainer.innerHTML = '';
+            cartSummaryContainer.innerHTML = '';
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = "<p>Your cart is empty!</p>";
+            } else {
+                var totalAmount = 0;
+                var totalItems = 0;
+
+                cart.forEach(function(item, index) {
+                    totalItems++;
+                    totalAmount += parseFloat(item.price.replace('Rs.', '').replace(',', '').trim());
+
+                    // Dynamically adjust image size based on number of items
+                    var imageSizeClass = 'small'; // Default small size for image
+                    if (cart.length > 5) {
+                        imageSizeClass = 'small'; // Small size if more than 5 items in cart
+                    } else if (cart.length <= 3) {
+                        imageSizeClass = 'large'; // Larger size if 3 or fewer items in cart
+                    }
+
+                    cartItemsContainer.innerHTML += `  
+                        <div class="cart-item">
+                            <img src="${item.image}" alt="${item.name}" class="${imageSizeClass}">
+                            <p>Name: ${item.name}</p>
+                            <p>Price: ${item.price}</p>
+                            <p>Size: ${item.size}</p>
+                            <button onclick="removeItem(${index})">Remove</button>
+                        </div>
+                    `;
+                });
+
+                cartSummaryContainer.innerHTML = `
+                    <p>Total Items: ${totalItems}</p>
+                    <p>Total Amount: Rs. ${totalAmount.toFixed(2)}</p>
+                `;
+            }
+        }
+
+        function removeItem(index) {
+            // Get the current cart from localStorage
+            var cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Remove the item at the given index
+            cart.splice(index, 1);
+
+            // Update the cart in localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            // Reload the cart page to reflect changes
+            loadCart();
+        }
+
+        function checkout() {
+            // Check if the user is logged in before proceeding to checkout
+            if (!isLoggedIn()) {
+                // If not logged in, redirect to the login page
+                alert("You need to log in first.");
+                window.location.href = "login.html";  // Redirecting to login page (you can change the URL as needed)
+            } else {
+                // If logged in, show the order placed message
+                alert("Your order is placed!");
+                // Optionally, clear the cart or redirect to a confirmation page
+                localStorage.setItem('cart', JSON.stringify([])); // Clear the cart
+                window.location.href = "orderConfirmation.html"; // Redirect to a confirmation page
+            }
+        }
+
+        // Load cart when the page is loaded
+        window.onload = loadCart;
+    </script>
+</body>
+</html>

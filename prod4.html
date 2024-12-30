@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classic Hoodie - HoodieShop</title>
+    <link rel="stylesheet" href="css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo"><a href="/">HoodieShop</a></div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="shoppage.html">Shop</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+                <li><a href="contactus.html">Contact</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="login.html">login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Product Details -->
+    <section class="product-detail">
+        <h1>Comfortable Hoodie</h1>
+        <div class="product-images">
+            <img src="blue.jpg" alt="Comfortable Hoodie">
+        </div>
+        <div class="product-info">
+            <p>Description: A stylish, comfortable hoodie for all seasons.</p>
+            <p>Price: Rs.1600</p>
+            <label for="size">Size:</label>
+            <select id="size">
+                <option value="small">Small</option>
+                <option value="medium">Medium</option>
+                <option value="large">Large</option>
+            </select>
+            <!-- Add to Cart button with onclick event -->
+            <button class="add-to-cart" onclick="addToCart()">Add to Cart</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 HoodieShop. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to add the product to the cart
+        function addToCart() {
+            // Get the selected size
+            var selectedSize = document.getElementById('size').value;
+
+            // Product details
+            var product = {
+                name: 'Comfortable Hoodie',
+                price: 'Rs.1600',
+                size: selectedSize,
+                image: 'blue.jpg'
+            };
+
+            // Get the current cart from localStorage or initialize an empty array
+            var cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Add the product to the cart
+            cart.push(product);
+
+            // Store the updated cart back to localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            // Redirect to the cart page after adding to cart
+            window.location.href = 'cart.html';
+        }
+    </script>
+</body>
+</html>

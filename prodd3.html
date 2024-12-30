@@ -1,0 +1,88 @@
+<style>
+    .container {
+    display: flex;
+    justify-content: center; /* Horizontally center */
+    align-items: center;     /* Vertically center */
+    height: 100vh;           /* Optional: sets the container's height to fill the screen */
+}
+</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classic Hoodie - HoodieShop</title>
+    <link rel="stylesheet" href="css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo"><a href="/">HoodieShop</a></div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="shoppage.html">Shop</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+                <li><a href="contactus.html">Contact</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="login.html">login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Product Details -->
+    <section class="product-detail">
+        <center>
+        <h1>Stylish Hoodie</h1>
+        <div class="product-images">
+            <img src="pik.jpg" alt="Stylish Hoodie">
+        </div>
+        <div class="product-info">
+            <p>Description: A stylish, comfortable hoodie for all seasons.</p>
+            <p>Price: rs.1500</p>
+            <label for="size">Size:</label>
+            <select id="size">
+                <option value="small">Small</option>
+                <option value="medium">Medium</option>
+                <option value="large">Large</option>
+            </select>
+            <!-- Add to Cart Button -->
+            <button class="add-to-cart" onclick="addToCart()">Add to Cart</button>
+        </div>
+        </center>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 HoodieShop. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to add the product to the cart
+        function addToCart() {
+            // Get the selected size
+            var selectedSize = document.getElementById('size').value;
+
+            // Product details
+            var product = {
+                name: 'Stylish Hoodie',
+                price: 'Rs.1500',
+                size: selectedSize,
+                image: 'pik.jpg'
+            };
+
+            // Get the current cart from localStorage or initialize an empty array
+            var cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Add the product to the cart
+            cart.push(product);
+
+            // Store the updated cart back to localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            // Redirect to the cart page
+            window.location.href = 'cart.html';
+        }
+    </script>
+</body>
+</html>

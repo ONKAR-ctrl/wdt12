@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - HoodieShop</title>
+    <link rel="stylesheet" href="css">
+    <style>
+        /* CSS for centering the checkout items */
+        .checkout {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Style for cart items in checkout */
+        .checkout-item {
+            display: inline-block;
+            margin: 20px;
+            text-align: center;
+        }
+
+        .checkout-item img {
+            width: 120px; /* Adjust image size */
+            height: auto;
+        }
+
+        /* Cart summary section */
+        #checkout-summary {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        /* Button styles */
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Form style for shipping details */
+        .form-container {
+            margin-top: 20px;
+            text-align: left;
+            display: inline-block;
+            max-width: 300px;
+        }
+
+        input[type="text"], input[type="email"], input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        label {
+            font-size: 16px;
+            display: block;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo"><a href="/">HoodieShop</a></div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="shoppage.html">Shop</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+                <li><a href="contactus.html">Contact</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="login.html">login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Checkout Items -->
+    <section class="checkout">
+        <h1>Checkout</h1>
+        <div id="checkout-items">
+            <!-- Checkout items will be dynamically added here -->
+        </div>
+        <div id="checkout-summary">
+            <!-- Checkout summary will be displayed here -->
+        </div>
+
+        <!-- Shipping Information Form -->
+        <div class="form-container">
+            <h3>Shipping Details</h3>
+            <form id="shipping-form">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" required>
+
+                <label for="address">Shipping Address:</label>
+                <input type="text" id="address" required>
+
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" required>
+
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" required>
+
+                <button type="submit">Confirm and Place Order</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 HoodieShop. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function loadCheckout() {
+            var cart = JSON.parse(localStorage.getItem('cart')) || [];
+            var checkoutItemsContainer = document.getElementById('checkout-items');
+            var checkoutSummaryContainer = document.getElementById('checkout-summary');
+
+            // Clear previous checkout content
+            checkoutItemsContainer.innerHTML = '';
+            checkoutSummaryContainer.innerHTML = '';
+
+            if (cart.length === 0) {
+                checkoutItemsContainer.innerHTML = "<p>Your cart is empty!</p>";
+            } else {
+                var totalAmount = 0;
+                var totalItems = 0;
+
+                cart.forEach(function(item) {
+                    totalItems++;
+                    totalAmount += parseFloat(item.price.replace('Rs.', '').replace(',', '').trim());
+
+                    checkoutItemsContainer.innerHTML += `
+                        <div class="checkout-item">
+                            <img src="${item.image}" alt="${item.name}">
+                            <p>Name: ${item.name}</p>
+                            <p>Price: ${item.price}</p>
+                            <p>Size: ${item.size}</p>
+                        </div>
+                    `;
+                });
+
+                checkoutSummaryContainer.innerHTML = `
+                    <p>Total Items: ${totalItems}</p>
+                    <p>Total Amount: Rs. ${totalAmount.toFixed(2)}</p>
+                `;
+            }
+        }
+
+        // Handle the shipping form submission
+        document.getElementById('shipping-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            var name = document.getElementById('name').value;
+            var address = document.getElementById('address').value;
+            var email = document.getElementById('email').value;
+            var phone = document.getElementById('phone').value;
+
+            alert("Thank you for your order! \nOrder Summary:\n" +
+                "Name: " + name + "\n" +
+                "Address: " + address + "\n" +
+                "Email: " + email + "\n" +
+                "Phone: " + phone + "\n" +
+                "Total Amount: Rs. " + document.getElementById('checkout-summary').children[1].textContent.split(': ')[1]);
+
+            // Clear the cart from localStorage after successful order
+            localStorage.removeItem('cart');
+            
+            // Redirect to a confirmation or home page
+            window.location.href = '/';
+        });
+
+        // Load checkout page when the page is loaded
+        window.onload = loadCheckout;
+    </script>
+</body>
+</html>
